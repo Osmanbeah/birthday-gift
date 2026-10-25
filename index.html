@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Happy Birthday! ✨</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       THEME & DESIGN SYSTEM
+       Anti-gravity floating birthday celebration
+       Palette:
+         Deep plum:  #1b1033
+         Peach:      #ffb38a
+         Mint:       #7ce8c8
+         Butter:     #ffe27a
+         Lilac:      #b9a6ff
+         Soft pink:  #ff8fa3
+         Warm white: #fff4ea
+       ========================================================================== */
+    :root {
+      --color-plum: #1b1033;
+      --color-plum-dark: #120924;
+      --color-peach: #ffb38a;
+      --color-mint: #7ce8c8;
+      --color-butter: #ffe27a;
+      --color-lilac: #b9a6ff;
+      --color-soft-pink: #ff8fa3;
+      --color-warm-white: #fff4ea;
+      
+      --font-headline: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: 'Figtree', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--color-plum);
+      color: var(--color-warm-white);
+      font-family: var(--font-body);
+      position: fixed; /* Prevents bounce scroll on iOS */
+    }
+
+    /* Ambient background with cosmic depth and glowing bottom atmosphere */
+    .space-background {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(circle at 50% 100%, rgba(255, 179, 138, 0.22) 0%, rgba(185, 166, 255, 0.18) 35%, rgba(27, 16, 51, 0.95) 75%),
+        radial-gradient(circle at 20% 20%, rgba(124, 232, 200, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(255, 143, 163, 0.1) 0%, transparent 45%),
+        linear-gradient(180deg, var(--color-plum-dark) 0%, var(--color-plum) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Ambient twinkling dust / stars */
+    .twinkles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      background-image: 
+        radial-gradient(1.5px 1.5px at 15% 20%, var(--color-warm-white) 100%, transparent),
+        radial-gradient(2px 2px at 35% 45%, var(--color-butter) 100%, transparent),
+        radial-gradient(1px 1px at 75% 15%, var(--color-mint) 100%, transparent),
+        radial-gradient(2px 2px at 85% 65%, var(--color-peach) 100%, transparent),
+        radial-gradient(1.5px 1.5px at 25% 85%, var(--color-lilac) 100%, transparent),
+        radial-gradient(1px 1px at 60% 80%, var(--color-soft-pink) 100%, transparent);
+      opacity: 0.75;
+      animation: starlight 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes starlight {
+      0% { opacity: 0.45; transform: scale(0.99); }
+      100% { opacity: 0.85; transform: scale(1.01); }
+    }
+
+    /* Physics & Confetti Canvas */
+    #balloonCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      touch-action: none;
+      cursor: pointer;
+    }
+
+    /* Content Layout Container */
+    .ui-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: max(20px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      pointer-events: none; /* Let balloon canvas catch taps, children re-enable */
+    }
+
+    /* Top branding / subtle subtitle */
+    .top-bar {
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      opacity: 0.85;
+      pointer-events: auto;
+      margin-top: 4px;
+    }
+
+    .badge-capsule {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(255, 244, 234, 0.08);
+      border: 1px solid rgba(255, 244, 234, 0.15);
+      border-radius: 999px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--color-butter);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .badge-capsule .sparkle-icon {
+      font-size: 0.95rem;
+      animation: spinSlow 12s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Hero Headline Area */
+    .headline-stage {
+      position: relative;
+      width: 100%;
+      max-width: 780px;
+      text-align: center;
+      margin: auto 0;
+      pointer-events: none;
+    }
+
+    .headline-text {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      text-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    .headline-line-1 {
+      font-size: clamp(2.2rem, 7vw, 4.4rem);
+      color: var(--color-warm-white);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .headline-line-2 {
+      font-size: clamp(2.6rem, 9.5vw, 5.6rem);
+      display: block;
+      filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Floating letters: each floats with weightless gentle motion & slight rotation */
+    .drift-letter {
+      display: inline-block;
+      will-change: transform;
+      animation-name: weightlessDrift;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: alternate;
+      transform-origin: center center;
+    }
+
+    @keyframes weightlessDrift {
+      0% {
+        transform: translate3d(0, 0, 0) rotate(var(--rot-min, -3deg));
+      }
+      50% {
+        transform: translate3d(var(--drift-x, 2px), var(--drift-y, -12px), 0) rotate(var(--rot-mid, 1deg));
+      }
+      100% {
+        transform: translate3d(calc(var(--drift-x, 2px) * -0.7), calc(var(--drift-y, -12px) * 0.9), 0) rotate(var(--rot-max, 4deg));
+      }
+    }
+
+    /* Subtitle tap instruction */
+    .tap-hint {
+      margin-top: 14px;
+      font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+      color: rgba(255, 244, 234, 0.7);
+      display: inline-block;
+      font-weight: 500;
+      background: rgba(27, 16, 51, 0.45);
+      padding: 4px 14px;
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Floating Polaroids Container */
+    .polaroid-gallery {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 8;
+    }
+
+    .polaroid {
+      position: absolute;
+      pointer-events: auto;
+      background: #ffffff;
+      padding: 8px 8px 24px 8px;
+      border-radius: 6px;
+      box-shadow: 
+        0 14px 28px rgba(10, 5, 20, 0.4),
+        0 6px 10px rgba(0, 0, 0, 0.25);
+      width: clamp(90px, 22vw, 140px);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+      cursor: grab;
+      will-change: transform;
+      animation-name: polaroidFloat;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+      animation-direction: alternate;
+      display: none; /* revealed only if image loads successfully */
+    }
+
+    .polaroid:hover, .polaroid:focus-visible {
+      transform: scale(1.1) rotate(0deg) !important;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 226, 122, 0.3);
+      z-index: 20;
+    }
+
+    .polaroid img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 3px;
+      background: #ece7e0;
+      display: block;
+    }
+
+    .polaroid .polaroid-pin {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 35% 35%, #ffe27a 0%, #d49826 80%);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Polaroid positions floating around headline */
+    .polaroid-1 {
+      top: 10%;
+      left: 4%;
+      --base-rot: -6deg;
+      animation-duration: 5.5s;
+    }
+
+    .polaroid-2 {
+      top: 14%;
+      right: 4%;
+      --base-rot: 8deg;
+      animation-duration: 6.8s;
+      animation-delay: -2s;
+    }
+
+    .polaroid-3 {
+      bottom: 22%;
+      right: 8%;
+      --base-rot: -4deg;
+      animation-duration: 7.2s;
+      animation-delay: -3.5s;
+    }
+
+    @keyframes polaroidFloat {
+      0% {
+        transform: translateY(0px) rotate(var(--base-rot, 0deg));
+      }
+      50% {
+        transform: translateY(-16px) rotate(calc(var(--base-rot, 0deg) + 2.5deg));
+      }
+      100% {
+        transform: translateY(-8px) rotate(calc(var(--base-rot, 0deg) - 2deg));
+      }
+    }
+
+    /* Control Buttons Bar at Bottom */
+    .bottom-controls {
+      width: 100%;
+      max-width: 580px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      pointer-events: auto;
+      z-index: 20;
+    }
+
+    /* Primary Song Button: Big, clear, enticing */
+    .btn-song {
+      width: 100%;
+      padding: 16px 28px;
+      font-family: var(--font-headline);
+      font-size: clamp(1.05rem, 4.2vw, 1.25rem);
+      font-weight: 700;
+      color: #1b1033;
+      background: linear-gradient(135deg, var(--color-butter) 0%, var(--color-peach) 50%, var(--color-soft-pink) 100%);
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 
+        0 10px 25px rgba(255, 179, 138, 0.45),
+        0 4px 10px rgba(0, 0, 0, 0.3),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    .btn-song:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 
+        0 14px 32px rgba(255, 179, 138, 0.6),
+        0 6px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .btn-song:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .btn-song.playing {
+      background: linear-gradient(135deg, var(--color-mint) 0%, var(--color-lilac) 100%);
+      color: #120924;
+      animation: pulsePlaying 2s ease-in-out infinite;
+      box-shadow: 
+        0 10px 30px rgba(124, 232, 200, 0.5),
+        0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes pulsePlaying {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.025); }
+    }
+
+    .btn-song .icon {
+      font-size: 1.35rem;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-song.playing .icon {
+      animation: noteBounce 0.8s ease-in-out infinite alternate;
+    }
+
+    @keyframes noteBounce {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-4px) scale(1.15) rotate(8deg); }
+    }
+
+    /* Secondary Controls: Gravity button & helper items */
+    .secondary-bar {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      max-width: 260px;
+      padding: 12px 18px;
+      font-family: var(--font-body);
+      font-size: clamp(0.85rem, 3.2vw, 0.98rem);
+      font-weight: 600;
+      color: var(--color-warm-white);
+      background: rgba(255, 244, 234, 0.1);
+      border: 1px solid rgba(255, 244, 234, 0.22);
+      border-radius: 14px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 244, 234, 0.18);
+      border-color: rgba(255, 244, 234, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary.active-gravity {
+      background: rgba(255, 143, 163, 0.2);
+      border-color: var(--color-soft-pink);
+      color: var(--color-soft-pink);
+      box-shadow: 0 0 15px rgba(255, 143, 163, 0.35);
+    }
+
+    /* Visible keyboard accessibility focus */
+    button:focus-visible {
+      outline: 3px solid var(--color-mint);
+      outline-offset: 3px;
+    }
+
+    /* Floating Personal Message Modal Card */
+    .message-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(18, 9, 36, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .message-backdrop.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .floating-card {
+      width: 100%;
+      max-width: 480px;
+      background: linear-gradient(165deg, rgba(38, 22, 73, 0.95) 0%, rgba(27, 16, 51, 0.98) 100%);
+      border: 1px solid rgba(255, 226, 122, 0.3);
+      border-radius: 28px;
+      padding: clamp(24px, 6vw, 36px);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(185, 166, 255, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      text-align: center;
+      position: relative;
+      transform: translateY(30px) scale(0.95);
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      overflow: hidden;
+    }
+
+    .message-backdrop.visible .floating-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .card-glow-halo {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 226, 122, 0.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      display: inline-block;
+      animation: gentleWiggle 3s ease-in-out infinite;
+    }
+
+    @keyframes gentleWiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-8deg); }
+      75% { transform: rotate(8deg); }
+    }
+
+    .card-headline {
+      font-family: var(--font-headline);
+      font-size: clamp(1.4rem, 4.5vw, 1.85rem);
+      font-weight: 800;
+      color: var(--color-butter);
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-body {
+      font-size: clamp(1rem, 3.5vw, 1.15rem);
+      line-height: 1.6;
+      color: var(--color-warm-white);
+      margin-bottom: 24px;
+      white-space: pre-line;
+      text-align: left;
+      background: rgba(255, 244, 234, 0.04);
+      padding: 18px 20px;
+      border-radius: 16px;
+      border-left: 3px solid var(--color-peach);
+    }
+
+    .card-signature {
+      font-family: var(--font-headline);
+      font-size: clamp(1.1rem, 3.6vw, 1.3rem);
+      font-weight: 700;
+      color: var(--color-peach);
+      text-align: right;
+      margin-bottom: 24px;
+    }
+
+    .btn-card-close {
+      padding: 12px 30px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 244, 234, 0.25);
+      background: rgba(255, 244, 234, 0.12);
+      color: var(--color-warm-white);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-card-close:hover {
+      background: rgba(255, 244, 234, 0.22);
+    }
+
+    /* Screen Reader Only Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Audio notification banner (if audio error or missing file) */
+    .audio-toast {
+      position: absolute;
+      top: 16px;
+      background: rgba(27, 16, 51, 0.9);
+      border: 1px solid var(--color-lilac);
+      border-radius: 12px;
+      padding: 8px 16px;
+      color: var(--color-butter);
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 100;
+      display: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      animation: fadeInDown 0.3s ease;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Media query adjustments for mobile screens */
+    @media (max-width: 640px) {
+      .polaroid-1 {
+        top: 8%;
+        left: 3%;
+        width: 82px;
+        padding: 5px 5px 16px 5px;
+      }
+      .polaroid-2 {
+        top: 8%;
+        right: 3%;
+        width: 82px;
+        padding: 5px 5px 16px 5px;
+      }
+      .polaroid-3 {
+        bottom: 22%;
+        right: 4%;
+        width: 86px;
+        padding: 5px 5px 16px 5px;
+      }
+      .headline-line-1 {
+        margin-bottom: 2px;
+      }
+      .headline-text {
+        padding: 0 4px;
+      }
+    }
+
+    /* Accessibility: Respect Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .drift-letter {
+        transform: none !important;
+      }
+      .polaroid {
+        animation: none !important;
+      }
+      .btn-song.playing {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient visual layers -->
+  <div class="space-background" aria-hidden="true"></div>
+  <div class="twinkles" aria-hidden="true"></div>
+
+  <!-- Interactive physics canvas for floating balloons and confetti -->
+  <canvas id="balloonCanvas"></canvas>
+
+  <!-- Optional polaroids floating around the headline -->
+  <div class="polaroid-gallery" id="polaroidGallery" aria-hidden="true">
+    <div class="polaroid polaroid-1" id="polaroidFrame1">
+      <div class="polaroid-pin"></div>
+      <img id="polaroidImg1" alt="Memories 1" />
+    </div>
+    <div class="polaroid polaroid-2" id="polaroidFrame2">
+      <div class="polaroid-pin"></div>
+      <img id="polaroidImg2" alt="Memories 2" />
+    </div>
+    <div class="polaroid polaroid-3" id="polaroidFrame3">
+      <div class="polaroid-pin"></div>
+      <img id="polaroidImg3" alt="Memories 3" />
+    </div>
+  </div>
+
+  <!-- UI Overlay -->
+  <main class="ui-overlay">
+    <!-- Top badge -->
+    <header class="top-bar">
+      <div class="badge-capsule">
+        <span class="sparkle-icon">✨</span>
+        <span>Special Celebration</span>
+        <span class="sparkle-icon">✨</span>
+      </div>
+    </header>
+
+    <!-- Center Headline Stage -->
+    <section class="headline-stage" aria-label="Birthday Greetings">
+      <h1 class="headline-text">
+        <span class="headline-line-1" id="headlineGreeting"></span>
+        <span class="headline-line-2" id="headlineName"></span>
+      </h1>
+      <p class="tap-hint" id="tapHint">🎈 Tap balloons to pop them! Tap anywhere for confetti ✨</p>
+    </section>
+
+    <!-- Bottom Controls -->
+    <footer class="bottom-controls">
+      <!-- Main Audio Play Button -->
+      <button type="button" class="btn-song" id="songBtn" aria-label="Play birthday song recorded for you">
+        <span class="icon" id="songIcon">▶</span>
+        <span id="songLabel">Press play, I sang for you</span>
+      </button>
+
+      <!-- Secondary Controls Bar -->
+      <div class="secondary-bar">
+        <button type="button" class="btn-secondary" id="gravityBtn" aria-label="Toggle gravity on and off">
+          <span id="gravityIcon">🪐</span>
+          <span id="gravityLabel">Turn gravity on</span>
+        </button>
+        <button type="button" class="btn-secondary" id="openMessageBtn" aria-label="Read personal birthday message">
+          <span>💌</span>
+          <span>Read note</span>
+        </button>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Floating Personal Message Card Modal -->
+  <div class="message-backdrop" id="messageBackdrop" role="dialog" aria-modal="true" aria-labelledby="cardTitle">
+    <div class="floating-card">
+      <div class="card-glow-halo"></div>
+      <div class="card-icon">🎂</div>
+      <h2 class="card-headline" id="cardTitle">Happy Birthday!</h2>
+      <div class="card-body" id="cardMessage"></div>
+      <div class="card-signature" id="cardSignature"></div>
+      <button type="button" class="btn-card-close" id="closeCardBtn">Close note</button>
+    </div>
+  </div>
+
+  <!-- Hidden HTML5 Audio Element -->
+  <audio id="birthdayAudio" preload="auto" src="birthday-song.mp3"></audio>
+
+  <!-- Audio feedback toast (shown only if file cannot be found) -->
+  <div class="audio-toast" id="audioToast" role="status"></div>
+
+  <!-- =======================================================================
+       JAVASCRIPT: CONFIGURATION, BALLOON PHYSICS, CONFETTI & INTERACTION
+       ======================================================================= -->
+  <script>
+    // =========================================================================
+    // ⚙️ CONFIGURATION - EDIT YOUR GIFT DETAILS HERE!
+    // =========================================================================
+    const HER_NAME = "[HER NAME]";
+    const MY_NAME = "[MY NAME]";
+    const PERSONAL_MESSAGE = "[MY PERSONAL MESSAGE TO HER]\n\nWishing you a year filled with unforgettable magic, joyful adventures, and everything your heart desires!";
+    const AUDIO_SRC = "birthday-song.mp3";
+    const PHOTO_SRCS = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+
+    // Palette configured for pastel letters and balloons
+    const PASTEL_PALETTE = [
+      "#ffb38a", // peach
+      "#7ce8c8", // mint
+      "#ffe27a", // butter
+      "#b9a6ff", // lilac
+      "#ff8fa3"  // soft pink
+    ];
+
+    // =========================================================================
+    // 1. HEADLINE GENERATION & FLOATING LETTER ANIMATION
+    // =========================================================================
+    const headlineGreetingEl = document.getElementById("headlineGreeting");
+    const headlineNameEl = document.getElementById("headlineName");
+    const cardMessageEl = document.getElementById("cardMessage");
+    const cardSignatureEl = document.getElementById("cardSignature");
+
+    // Populate modal text
+    cardMessageEl.textContent = PERSONAL_MESSAGE;
+    cardSignatureEl.textContent = `— ${MY_NAME}`;
+
+    // Helper to generate floating letters with subtle individual delays & rotations
+    function createDriftLetters(text, isNameLine = false) {
+      const container = document.createDocumentFragment();
+      let colorIndex = 0;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        if (char === " ") {
+          const space = document.createElement("span");
+          space.style.display = "inline-block";
+          space.style.width = "0.3em";
+          container.appendChild(space);
+          continue;
+        }
+
+        const span = document.createElement("span");
+        span.className = "drift-letter";
+        span.textContent = char;
+
+        // Pastel color rotation on the name line
+        if (isNameLine) {
+          span.style.color = PASTEL_PALETTE[colorIndex % PASTEL_PALETTE.length];
+          colorIndex++;
+        }
+
+        // Varied float rhythm per letter
+        const duration = (3.2 + Math.random() * 2.5).toFixed(2);
+        const delay = (-Math.random() * 3.5).toFixed(2);
+        const rotMin = (-4 + Math.random() * 2).toFixed(1);
+        const rotMid = (-1 + Math.random() * 2).toFixed(1);
+        const rotMax = (2 + Math.random() * 3).toFixed(1);
+        const driftX = (-4 + Math.random() * 8).toFixed(1);
+        const driftY = (-14 - Math.random() * 8).toFixed(1);
+
+        span.style.setProperty("--rot-min", `${rotMin}deg`);
+        span.style.setProperty("--rot-mid", `${rotMid}deg`);
+        span.style.setProperty("--rot-max", `${rotMax}deg`);
+        span.style.setProperty("--drift-x", `${driftX}px`);
+        span.style.setProperty("--drift-y", `${driftY}px`);
+        span.style.animationDuration = `${duration}s`;
+        span.style.animationDelay = `${delay}s`;
+
+        container.appendChild(span);
+      }
+      return container;
+    }
+
+    headlineGreetingEl.appendChild(createDriftLetters("Happy birthday,"));
+    headlineNameEl.appendChild(createDriftLetters(`${HER_NAME}!`, true));
+
+    // =========================================================================
+    // 2. OPTIONAL POLAROID PHOTO HANDLING
+    // =========================================================================
+    // Only display polaroids if the images load without errors
+    PHOTO_SRCS.forEach((src, idx) => {
+      const frameEl = document.getElementById(`polaroidFrame${idx + 1}`);
+      const imgEl = document.getElementById(`polaroidImg${idx + 1}`);
+      if (!frameEl || !imgEl) return;
+
+      const testImg = new Image();
+      testImg.onload = () => {
+        imgEl.src = src;
+        frameEl.style.display = "block";
+      };
+      testImg.onerror = () => {
+        frameEl.style.display = "none";
+      };
+      testImg.src = src;
+    });
+
+    // =========================================================================
+    // 3. SYNTHETIC AUDIO POP SOUND GENERATOR (Web Audio API)
+    // =========================================================================
+    // Lightweight audio pop without needing any external audio assets
+    let audioCtx = null;
+    function playPopSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        if (!audioCtx) {
+          audioCtx = new AudioContext();
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        // Sweet wooden balloon pop frequency curve
+        const now = audioCtx.currentTime;
+        const startFreq = 420 + Math.random() * 120;
+        osc.frequency.setValueAtTime(startFreq, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.09);
+      } catch (e) {
+        // AudioContext not permitted or supported; silent fallback
+      }
+    }
+
+    // =========================================================================
+    // 4. CANVAS PHYSICS: FLOATING BALLOONS & CONFETTI SYSTEM
+    // =========================================================================
+    const canvas = document.getElementById("balloonCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let width = 0;
+    let height = 0;
+    let dpr = window.devicePixelRatio || 1;
+
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Physics parameters
+    let gravityEnabled = false;
+    let isSongPlaying = false;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Balloon Class
+    class Balloon {
+      constructor(initialY = null) {
+        this.reset(initialY);
+      }
+
+      reset(customY = null) {
+        this.radiusX = 22 + Math.random() * 14; // balloon horizontal radius
+        this.radiusY = this.radiusX * (1.18 + Math.random() * 0.12); // slightly taller
+        this.x = this.radiusX + Math.random() * (width - this.radiusX * 2);
+        this.y = customY !== null ? customY : height + this.radiusY + Math.random() * 200;
+        
+        // Buoyancy / upward speed
+        this.baseRiseSpeed = (0.75 + Math.random() * 0.85) * (reducedMotion ? 0.45 : 1);
+        this.vx = (Math.random() - 0.5) * 0.8;
+        this.vy = -this.baseRiseSpeed;
+
+        // Sway oscillation
+        this.swayAngle = Math.random() * Math.PI * 2;
+        this.swaySpeed = 0.02 + Math.random() * 0.025;
+        this.swayDistance = 0.6 + Math.random() * 0.8;
+
+        // String curve oscillation
+        this.stringLength = 38 + Math.random() * 20;
+        this.stringWiggle = Math.random() * Math.PI * 2;
+
+        // Visual colors
+        this.color = PASTEL_PALETTE[Math.floor(Math.random() * PASTEL_PALETTE.length)];
+        this.opacity = 0.88 + Math.random() * 0.1;
+        this.popped = false;
+      }
+
+      update() {
+        if (gravityEnabled) {
+          // GRAVITY MODE: Fall down, bounce off floor & side walls
+          const g = 0.38;
+          const bounceRestitution = 0.68;
+          const friction = 0.985;
+
+          this.vy += g;
+          this.x += this.vx;
+          this.y += this.vy;
+          this.vx *= friction;
+
+          // Wall bounces
+          if (this.x - this.radiusX < 0) {
+            this.x = this.radiusX;
+            this.vx = -this.vx * bounceRestitution;
+          } else if (this.x + this.radiusX > width) {
+            this.x = width - this.radiusX;
+            this.vx = -this.vx * bounceRestitution;
+          }
+
+          // Floor bounce
+          const floorY = height - this.radiusY - 6;
+          if (this.y > floorY) {
+            this.y = floorY;
+            this.vy = -this.vy * bounceRestitution;
+            // Add a little roll velocity on bounce
+            if (Math.abs(this.vy) < 0.8) {
+              this.vy = 0;
+            }
+          }
+        } else {
+          // ANTI-GRAVITY MODE: Float weightlessly upward & sway
+          let currentRiseSpeed = this.baseRiseSpeed;
+          if (isSongPlaying) {
+            currentRiseSpeed *= 1.85; // Faster during birthday song
+          }
+
+          // Smoothly steer vy back to negative (upward)
+          this.vy += (-currentRiseSpeed - this.vy) * 0.06;
+          this.y += this.vy;
+
+          this.swayAngle += this.swaySpeed;
+          this.x += Math.sin(this.swayAngle) * this.swayDistance + this.vx * 0.1;
+
+          // Gentle string wiggle
+          this.stringWiggle += 0.04;
+
+          // Keep within horizontal boundaries
+          if (this.x < this.radiusX) this.x = this.radiusX;
+          if (this.x > width - this.radiusX) this.x = width - this.radiusX;
+
+          // Respawn at bottom when floating above the screen
+          if (this.y < -this.radiusY - this.stringLength - 20) {
+            this.reset(height + this.radiusY + 10 + Math.random() * 50);
+          }
+        }
+      }
+
+      draw(context) {
+        context.save();
+        context.translate(this.x, this.y);
+
+        // String dangling from the knot
+        const knotY = this.radiusY * 0.98;
+        context.beginPath();
+        context.moveTo(0, knotY);
+        const wave1X = Math.sin(this.stringWiggle) * 6;
+        const wave2X = Math.cos(this.stringWiggle) * 6;
+        context.bezierCurveTo(
+          wave1X, knotY + this.stringLength * 0.35,
+          wave2X, knotY + this.stringLength * 0.7,
+          0, knotY + this.stringLength
+        );
+        context.strokeStyle = "rgba(255, 244, 234, 0.4)";
+        context.lineWidth = 1.4;
+        context.stroke();
+
+        // Balloon Knot
+        context.beginPath();
+        context.moveTo(-3, knotY + 4);
+        context.lineTo(3, knotY + 4);
+        context.lineTo(0, knotY - 1);
+        context.closePath();
+        context.fillStyle = this.color;
+        context.fill();
+
+        // Balloon Body: Elegant organic egg shape using bezier curves
+        context.beginPath();
+        const rx = this.radiusX;
+        const ry = this.radiusY;
+        
+        // Draw top dome and tapered bottom
+        context.moveTo(0, -ry);
+        context.bezierCurveTo(rx * 1.05, -ry, rx * 1.05, ry * 0.45, 0, ry);
+        context.bezierCurveTo(-rx * 1.05, ry * 0.45, -rx * 1.05, -ry, 0, -ry);
+        context.closePath();
+
+        // Radial gradient for 3D depth and glow
+        const grad = context.createRadialGradient(
+          -rx * 0.3, -ry * 0.35, rx * 0.1,
+          0, 0, ry * 1.1
+        );
+        grad.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+        grad.addColorStop(0.22, this.color);
+        grad.addColorStop(0.85, this.color);
+        grad.addColorStop(1, "rgba(18, 9, 36, 0.45)");
+
+        context.fillStyle = grad;
+        context.globalAlpha = this.opacity;
+        context.shadowColor = "rgba(0, 0, 0, 0.25)";
+        context.shadowBlur = 10;
+        context.shadowOffsetY = 6;
+        context.fill();
+
+        // Specular highlight gleam on top left
+        context.beginPath();
+        context.ellipse(-rx * 0.34, -ry * 0.42, rx * 0.24, ry * 0.12, -Math.PI / 4, 0, Math.PI * 2);
+        context.fillStyle = "rgba(255, 255, 255, 0.45)";
+        context.shadowBlur = 0;
+        context.shadowOffsetY = 0;
+        context.fill();
+
+        context.restore();
+      }
+
+      // Hit test for taps/clicks
+      containsPoint(px, py) {
+        const dx = px - this.x;
+        const dy = py - this.y;
+        // Elliptical equation test
+        return (dx * dx) / (this.radiusX * this.radiusX) + (dy * dy) / (this.radiusY * this.radiusY) <= 1.25;
+      }
+    }
+
+    // Confetti Particle Class
+    class Confetti {
+      constructor(x, y, isBig = false) {
+        this.x = x;
+        this.y = y;
+        const speed = isBig ? (4 + Math.random() * 8) : (2.5 + Math.random() * 5);
+        const angle = Math.random() * Math.PI * 2;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed - (isBig ? 3.5 : 1.5);
+        this.color = PASTEL_PALETTE[Math.floor(Math.random() * PASTEL_PALETTE.length)];
+        this.size = 5 + Math.random() * 6;
+        this.rotationX = Math.random() * 360;
+        this.rotationY = Math.random() * 360;
+        this.rotSpeedX = (Math.random() - 0.5) * 12;
+        this.rotSpeedY = (Math.random() - 0.5) * 12;
+        this.opacity = 1;
+        this.decay = 0.012 + Math.random() * 0.015;
+        this.shape = Math.random() > 0.35 ? "rect" : "circle";
+      }
+
+      update() {
+        this.vy += 0.16; // gravity
+        this.vx *= 0.98; // air drag
+        this.x += this.vx;
+        this.y += this.vy;
+        this.rotationX += this.rotSpeedX;
+        this.rotationY += this.rotSpeedY;
+        this.opacity -= this.decay;
+      }
+
+      draw(context) {
+        if (this.opacity <= 0) return;
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate((this.rotationX * Math.PI) / 180);
+        context.scale(
+          Math.cos((this.rotationY * Math.PI) / 180),
+          1
+        );
+        context.globalAlpha = Math.max(0, this.opacity);
+        context.fillStyle = this.color;
+
+        if (this.shape === "rect") {
+          context.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.7);
+        } else {
+          context.beginPath();
+          context.arc(0, 0, this.size / 2.2, 0, Math.PI * 2);
+          context.fill();
+        }
+        context.restore();
+      }
+    }
+
+    // Initialize balloons based on screen width
+    const BALLOON_COUNT = Math.min(22, Math.max(12, Math.floor(window.innerWidth / 35)));
+    const balloons = [];
+    for (let i = 0; i < BALLOON_COUNT; i++) {
+      // Distribute evenly vertically on initial load
+      const initY = (height / BALLOON_COUNT) * i + Math.random() * 40;
+      balloons.push(new Balloon(initY));
+    }
+
+    const confettiList = [];
+
+    function spawnConfettiBurst(x, y, count = 30, isBig = false) {
+      for (let i = 0; i < count; i++) {
+        confettiList.push(new Confetti(x, y, isBig));
+      }
+    }
+
+    // Pop a balloon with effect & replace it
+    function popBalloon(balloon, index) {
+      spawnConfettiBurst(balloon.x, balloon.y, 35, true);
+      playPopSound();
+      // Remove or reset balloon
+      balloons.splice(index, 1);
+      setTimeout(() => {
+        // Spawn a fresh balloon from the bottom
+        balloons.push(new Balloon(height + 60));
+      }, 350);
+    }
+
+    // Pop 10 balloons at once (when the song finishes!)
+    function popMultipleBalloons(targetCount = 10) {
+      const count = Math.min(targetCount, balloons.length);
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          if (balloons.length > 0) {
+            const idx = Math.floor(Math.random() * balloons.length);
+            const b = balloons[idx];
+            if (b) popBalloon(b, idx);
+          }
+        }, i * 110);
+      }
+    }
+
+    // Interactive pointer handling on canvas & body
+    function handlePointerHit(clientX, clientY) {
+      let hitBalloon = false;
+      // Loop backwards to hit top-most balloon first
+      for (let i = balloons.length - 1; i >= 0; i--) {
+        const b = balloons[i];
+        if (b.containsPoint(clientX, clientY)) {
+          popBalloon(b, i);
+          hitBalloon = true;
+          break;
+        }
+      }
+
+      // If empty space was tapped: spawn sweet small confetti burst!
+      if (!hitBalloon) {
+        spawnConfettiBurst(clientX, clientY, 16, false);
+      }
+    }
+
+    canvas.addEventListener("pointerdown", (e) => {
+      handlePointerHit(e.clientX, e.clientY);
+    });
+
+    // Main Animation Physics Loop
+    let lastTime = 0;
+    let songConfettiTimer = 0;
+
+    function renderLoop(timestamp) {
+      ctx.clearRect(0, 0, width, height);
+
+      // Continuous steady confetti stream while song is playing
+      if (isSongPlaying) {
+        songConfettiTimer++;
+        if (songConfettiTimer % 6 === 0) {
+          const spawnX = Math.random() * width;
+          confettiList.push(new Confetti(spawnX, -10, false));
+        }
+      }
+
+      // Update & Draw Balloons
+      for (let i = 0; i < balloons.length; i++) {
+        balloons[i].update();
+        balloons[i].draw(ctx);
+      }
+
+      // Update & Draw Confetti
+      for (let i = confettiList.length - 1; i >= 0; i--) {
+        const p = confettiList[i];
+        p.update();
+        p.draw(ctx);
+        if (p.opacity <= 0 || p.y > height + 40) {
+          confettiList.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(renderLoop);
+    }
+    requestAnimationFrame(renderLoop);
+
+    // =========================================================================
+    // 5. GRAVITY BUTTON TOGGLE
+    // =========================================================================
+    const gravityBtn = document.getElementById("gravityBtn");
+    const gravityLabel = document.getElementById("gravityLabel");
+    const gravityIcon = document.getElementById("gravityIcon");
+
+    gravityBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      gravityEnabled = !gravityEnabled;
+      
+      if (gravityEnabled) {
+        gravityLabel.textContent = "Let go again";
+        gravityIcon.textContent = "🎈";
+        gravityBtn.classList.add("active-gravity");
+        gravityBtn.setAttribute("aria-label", "Let go again and restore anti-gravity float");
+      } else {
+        gravityLabel.textContent = "Turn gravity on";
+        gravityIcon.textContent = "🪐";
+        gravityBtn.classList.remove("active-gravity");
+        gravityBtn.setAttribute("aria-label", "Turn gravity on so balloons fall and bounce");
+      }
+    });
+
+    // =========================================================================
+    // 6. BIRTHDAY SONG PLAYER & SONG COMPLETION CELEBRATION
+    // =========================================================================
+    const songBtn = document.getElementById("songBtn");
+    const songLabel = document.getElementById("songLabel");
+    const songIcon = document.getElementById("songIcon");
+    const birthdayAudio = document.getElementById("birthdayAudio");
+    const audioToast = document.getElementById("audioToast");
+    const messageBackdrop = document.getElementById("messageBackdrop");
+    const closeCardBtn = document.getElementById("closeCardBtn");
+    const openMessageBtn = document.getElementById("openMessageBtn");
+
+    birthdayAudio.src = AUDIO_SRC;
+
+    function showAudioToast(message) {
+      audioToast.textContent = message;
+      audioToast.style.display = "block";
+      setTimeout(() => {
+        audioToast.style.display = "none";
+      }, 4500);
+    }
+
+    // Toggle Play / Pause
+    songBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      if (audioCtx && audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+
+      if (birthdayAudio.paused) {
+        const playPromise = birthdayAudio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              isSongPlaying = true;
+              songBtn.classList.add("playing");
+              songLabel.textContent = "Pause song";
+              songIcon.textContent = "⏸";
+            })
+            .catch((err) => {
+              console.warn("Audio play issue:", err);
+              // Graceful simulation if audio file not found or browser restricted
+              handleSimulatedPlaybackFallback();
+            });
+        }
+      } else {
+        birthdayAudio.pause();
+        isSongPlaying = false;
+        songBtn.classList.remove("playing");
+        songLabel.textContent = "Resume song";
+        songIcon.textContent = "▶";
+      }
+    });
+
+    // Fallback simulation in case the user hasn't added birthday-song.mp3 yet
+    let fallbackTimer = null;
+    function handleSimulatedPlaybackFallback() {
+      showAudioToast(`💡 Note: Put '${AUDIO_SRC}' in the same folder to hear your real song! Running celebration demo ✨`);
+      isSongPlaying = true;
+      songBtn.classList.add("playing");
+      songLabel.textContent = "Pause song";
+      songIcon.textContent = "⏸";
+
+      // Simulate a 12 second celebration clip then finish
+      clearTimeout(fallbackTimer);
+      fallbackTimer = setTimeout(() => {
+        onSongComplete();
+      }, 12000);
+    }
+
+    // Song ended naturally
+    birthdayAudio.addEventListener("ended", () => {
+      onSongComplete();
+    });
+
+    function onSongComplete() {
+      isSongPlaying = false;
+      songBtn.classList.remove("playing");
+      songLabel.textContent = "Play again";
+      songIcon.textContent = "🔁";
+
+      // 1. Pop 10 balloons simultaneously
+      popMultipleBalloons(10);
+
+      // 2. Extra grand confetti blast
+      spawnConfettiBurst(width / 2, height / 2, 80, true);
+
+      // 3. Fade in final message in the nice floating card
+      setTimeout(() => {
+        messageBackdrop.classList.add("visible");
+      }, 800);
+    }
+
+    // Modal Card Close & Open Buttons
+    closeCardBtn.addEventListener("click", () => {
+      messageBackdrop.classList.remove("visible");
+    });
+
+    openMessageBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      messageBackdrop.classList.add("visible");
+    });
+
+    // Close on backdrop tap
+    messageBackdrop.addEventListener("click", (e) => {
+      if (e.target === messageBackdrop) {
+        messageBackdrop.classList.remove("visible");
+      }
+    });
+
+    // Escape key closes modal
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && messageBackdrop.classList.contains("visible")) {
+        messageBackdrop.classList.remove("visible");
+      }
+    });
+  </script>
+</body>
+</html>
