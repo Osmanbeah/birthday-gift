@@ -1271,6 +1271,9 @@
       }
 
       if (birthdayAudio.paused) {
+        if (birthdayAudio.ended || (birthdayAudio.duration && birthdayAudio.currentTime >= birthdayAudio.duration)) {
+          birthdayAudio.currentTime = 0;
+        }
         const playPromise = birthdayAudio.play();
         if (playPromise !== undefined) {
           playPromise
