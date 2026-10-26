@@ -721,7 +721,7 @@
   </div>
 
   <!-- Hidden HTML5 Audio Element -->
-  <audio id="birthdayAudio" preload="auto" src="birthday-song.mp3"></audio>
+  <audio id="birthdayAudio" autoplay preload="auto" src="birthday-song.mp3"></audio>
 
   <!-- Audio feedback toast (shown only if file cannot be found) -->
   <div class="audio-toast" id="audioToast" role="status"></div>
@@ -1251,6 +1251,7 @@
     const messageBackdrop = document.getElementById("messageBackdrop");
     const closeCardBtn = document.getElementById("closeCardBtn");
     const openMessageBtn = document.getElementById("openMessageBtn");
+    const tapHintEl = document.getElementById("tapHint");
 
     birthdayAudio.src = AUDIO_SRC;
 
@@ -1262,41 +1263,89 @@
       }, 4500);
     }
 
-    // Toggle Play / Pause
-    songBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-
+    function startPlayingSong() {
       if (audioCtx && audioCtx.state === "suspended") {
         audioCtx.resume();
       }
 
+      if (birthdayAudio.ended || (birthdayAudio.duration && birthdayAudio.currentTime >= birthdayAudio.duration)) {
+        birthdayAudio.currentTime = 0;
+      }
+
+      const playPromise = birthdayAudio.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            isSongPlaying = true;
+            songBtn.classList.add("playing");
+            songLabel.textContent = "Pause song";
+            songIcon.textContent = "⏸";
+            removeFirstGestureListeners();
+            if (tapHintEl) {
+              tapHintEl.textContent = "🎈 Tap balloons to pop them! Tap anywhere for confetti ✨";
+            }
+          })
+          .catch((err) => {
+            // Browser autoplay restrictions require a user touch or tap first
+            console.log("Autoplay restricted by browser, awaiting first touch:", err);
+            setupFirstGestureAutoplay();
+          });
+      }
+    }
+
+    function pauseSong() {
+      birthdayAudio.pause();
+      isSongPlaying = false;
+      songBtn.classList.remove("playing");
+      songLabel.textContent = "Resume song";
+      songIcon.textContent = "▶";
+    }
+
+    // Seamless first-gesture autoplay for phones & desktop
+    let hasGestureTriggered = false;
+    const gestureEvents = ["pointerdown", "touchstart", "mousedown", "keydown"];
+
+    function onFirstUserGesture() {
+      if (hasGestureTriggered) return;
+      hasGestureTriggered = true;
+      removeFirstGestureListeners();
+      startPlayingSong();
+    }
+
+    function setupFirstGestureAutoplay() {
+      if (tapHintEl) {
+        tapHintEl.textContent = "✨ Tap anywhere to start the song & celebration! 🎵";
+      }
+      gestureEvents.forEach((evt) => {
+        window.addEventListener(evt, onFirstUserGesture, { capture: true, passive: true });
+      });
+    }
+
+    function removeFirstGestureListeners() {
+      gestureEvents.forEach((evt) => {
+        window.removeEventListener(evt, onFirstUserGesture, { capture: true });
+      });
+    }
+
+    // Toggle Play / Pause on button tap
+    songBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
       if (birthdayAudio.paused) {
-        if (birthdayAudio.ended || (birthdayAudio.duration && birthdayAudio.currentTime >= birthdayAudio.duration)) {
-          birthdayAudio.currentTime = 0;
-        }
-        const playPromise = birthdayAudio.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              isSongPlaying = true;
-              songBtn.classList.add("playing");
-              songLabel.textContent = "Pause song";
-              songIcon.textContent = "⏸";
-            })
-            .catch((err) => {
-              console.warn("Audio play issue:", err);
-              // Graceful simulation if audio file not found or browser restricted
-              handleSimulatedPlaybackFallback();
-            });
-        }
+        startPlayingSong();
       } else {
-        birthdayAudio.pause();
-        isSongPlaying = false;
-        songBtn.classList.remove("playing");
-        songLabel.textContent = "Resume song";
-        songIcon.textContent = "▶";
+        pauseSong();
       }
     });
+
+    // Attempt instant autoplay immediately on page load
+    window.addEventListener("DOMContentLoaded", () => {
+      startPlayingSong();
+    });
+    setTimeout(() => {
+      if (birthdayAudio.paused && !hasGestureTriggered) {
+        startPlayingSong();
+      }
+    }, 150);
 
     // Fallback simulation in case the user hasn't added birthday-song.mp3 yet
     let fallbackTimer = null;
